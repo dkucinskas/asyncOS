@@ -1,6 +1,7 @@
 ENTRY(_start)
 
-SECTIONS {
+SECTIONS
+{
     . = 1M;
 
     .boot :
@@ -9,7 +10,7 @@ SECTIONS {
         *(.multiboot)
     }
 
-    .text :
+    .text : /*BLOCK(4K) : ALIGN(4K)*/
     {
         *(.text)
     }

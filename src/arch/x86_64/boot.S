@@ -9,6 +9,7 @@ start:
 */
 .section .text
 .global _start
+.type _start, @function
 
 _start:
     // print `OK` to screen

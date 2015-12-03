@@ -31,12 +31,13 @@ $(iso): $(kernel) $(grub_cfg)
 	@rm -r build/isofiles
 
 $(kernel): $(assembly_object_files) $(linker_script)
-	@ld -n -T $(linker_script) -o $(kernel) $(assembly_object_files)
+	@$(asm) -T $(linker_script) -o $(kernel) -ffreestanding -O2 -nostdlib $(assembly_object_files) -lgcc
+	#@ld -n -T $(linker_script) -o $(kernel) $(assembly_object_files)
 	
 # compile assembly files
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.S
 	@mkdir -p $(shell dirname $@)
-	@asm -march=i686 -fpic -ffreestanding -c $< -o $@
+	@$(asm) -march=corei7 -fpic -ffreestanding -c $< -o $@
 
 #@nasm -felf32 $< -o $@
 #@nasm -f elf64 $< -o $@
