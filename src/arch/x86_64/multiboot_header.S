@@ -14,15 +14,19 @@
 #    dd 8 ; size
 #header_end:
 
-.set ALIGN,   1<<0
-.set MEMINFO, 1<<1
-.set FLAGS,   ALIGN | MEMINFO
-.set MAGIC,   0x1BADB002
-.set CHECKSUM, -(MAGIC + FLAGS) 
+.section .multiboot_header
+header_start:
+    .int 0xe85250d6     
+    .int 0
+    .int header_end - header_start
+    # checksum
+    .int 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start))
+    
+    # insert optional multiboot tags here
+    # required end tag
+    .long 0 # type
+    .long 0 # flags
+    .int 8 # size
+header_end:
 
-.section .multiboot
-.align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
 

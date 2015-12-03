@@ -1,11 +1,14 @@
+#i686-pc-linux-gnu-gcc -march=corei7 -fpic -ffreestanding -c boot.S -o boot.o
+#arm-none-eabi-gcc -mcpu=arm1176jzf-s -fpic -ffreestanding -c boot.S -o boot.o
 arch ?= x86_64
+asm ?= i686-pc-linux-gnu-gcc 
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
 
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
-assembly_source_files := $(wildcard src/arch/$(arch)/*.asm)
-assembly_object_files := $(patsubst src/arch/$(arch)/%.asm, \
+assembly_source_files := $(wildcard src/arch/$(arch)/*.S)
+assembly_object_files := $(patsubst src/arch/$(arch)/%.S, \
 	build/arch/$(arch)/%.o, $(assembly_source_files))
 
 .PHONY: all clean run iso
@@ -31,8 +34,10 @@ $(kernel): $(assembly_object_files) $(linker_script)
 	@ld -n -T $(linker_script) -o $(kernel) $(assembly_object_files)
 	
 # compile assembly files
-build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
+build/arch/$(arch)/%.o: src/arch/$(arch)/%.S
 	@mkdir -p $(shell dirname $@)
-	@nasm -felf32 $< -o $@
-	#@nasm -f elf64 $< -o $@
+	@asm -march=i686 -fpic -ffreestanding -c $< -o $@
+
+#@nasm -felf32 $< -o $@
+#@nasm -f elf64 $< -o $@
 

@@ -1,3 +1,8 @@
+Emulating in qemu:
+qemu-system-arm -cpu arm1176 -m 256 -M versatilepb -drive format=raw,file=os-x86_64.iso
+
+http://paulscott.co.za/blog/full-raspberry-pi-raspbian-emulation-with-qemu/
+http://linux-mitterteich.de/fileadmin/datafile/papers/2013/qemu_raspiemu_lug_18_sep_2013.pdf
 https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Virtual_ARM_Linux_environment
 https://www.archlinux.org/packages/?q=qemu
 sudo pacman -S qemu-arch-extra
