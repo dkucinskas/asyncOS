@@ -1,7 +1,9 @@
 #i686-pc-linux-gnu-gcc -march=corei7 -fpic -ffreestanding -c boot.S -o boot.o
 #arm-none-eabi-gcc -mcpu=arm1176jzf-s -fpic -ffreestanding -c boot.S -o boot.o
 arch ?= x86_64
-asm ?= i686-pc-linux-gnu-gcc 
+cc ?= i686-pc-linux-gnu-gcc # compiler command 
+march =? native # brodwell
+masm =? att # AT&T | Intel
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
 
@@ -30,15 +32,13 @@ $(iso): $(kernel) $(grub_cfg)
 	@grub-mkrescue -o $(iso) build/isofiles 2> /dev/null
 	@rm -r build/isofiles
 
+kernel: $(kernel)
+
 $(kernel): $(assembly_object_files) $(linker_script)
-	@$(asm) -T $(linker_script) -o $(kernel) -ffreestanding -O2 -nostdlib $(assembly_object_files) -lgcc
-	#@ld -n -T $(linker_script) -o $(kernel) $(assembly_object_files)
+	@$(cc) -T $(linker_script) -o $(kernel) -ffreestanding -O2 -nostdlib $(assembly_object_files) -lgcc
 	
 # compile assembly files
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.S
 	@mkdir -p $(shell dirname $@)
-	@$(asm) -march=corei7 -fpic -ffreestanding -c $< -o $@
-
-#@nasm -felf32 $< -o $@
-#@nasm -f elf64 $< -o $@
+	@$(cc) -march=$(march) -fpic -ffreestanding -c $< -o $@
 

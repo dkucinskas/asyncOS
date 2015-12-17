@@ -1,0 +1,21 @@
+
+--- REGISTERS 
+General purpose registers: r0-r12
+
+
+--- General Purpose I/O (GPIO)
+Address 0x20200000
+
+FUNCTIONS:
+00-24: Function select
+28-36: Turn On Pin
+40-48: Turn Off Pin
+52-60: Pin Input 
+
+--- INSTRUCTIONS
+mov - "move arg #1 into arg #0" store value into register (values which have a binary representation which only has 1s in the first 8 bits of the representation. In other words, 8 1s or 0s followed by only 0s.)
+ldr - "load register" store value into register (from memory)
+lsl - "logical shift left" shift the binary representation for the first arg left by the second arg.
+str - "store register" store value in first arg into the address computed from the expression afterwards.
+b - "branch" causes the next line to be executed to be the one at the label specified, rather than the one after it. 
+
